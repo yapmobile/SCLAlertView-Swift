@@ -21,10 +21,16 @@ let kDefaultAnimationDuration = 2.0
 
 class ViewController: UIViewController {
     
+    fileprivate var dummyView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
+        let v = UIView(frame: self.view.bounds)
+        v.frame.size.height /= 2
+        self.dummyView = v
+        self.view.addSubview(v)
     }
     
     override func didReceiveMemoryWarning() {
@@ -33,7 +39,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showSuccess(_ sender: AnyObject) {
-		let alert = SCLAlertView()
+        let alert = SCLAlertView(presentingView: UIApplication.shared.keyWindow!)
 		_ = alert.addButton("First Button", target:self, selector:#selector(ViewController.firstButton))
 		_ = alert.addButton("Second Button") {
 			print("Second button tapped")
@@ -42,25 +48,25 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showError(_ sender: AnyObject) {
-		_ = SCLAlertView().showError("Hold On...", subTitle:"You have not saved your Submission yet. Please save the Submission before accessing the Responses list. Blah de blah de blah, blah. Blah de blah de blah, blah.Blah de blah de blah, blah.Blah de blah de blah, blah.Blah de blah de blah, blah.Blah de blah de blah, blah.", closeButtonTitle:"OK")
+		_ = SCLAlertView(presentingView: UIApplication.shared.keyWindow!).showError("Hold On...", subTitle:"You have not saved your Submission yet. Please save the Submission before accessing the Responses list. Blah de blah de blah, blah. Blah de blah de blah, blah.Blah de blah de blah, blah.Blah de blah de blah, blah.Blah de blah de blah, blah.Blah de blah de blah, blah.", closeButtonTitle:"OK")
 //        SCLAlertView().showError(self, title: kErrorTitle, subTitle: kSubtitle)
     }
     
     @IBAction func showNotice(_ sender: AnyObject) {
-        _ = SCLAlertView().showNotice(kNoticeTitle, subTitle: kSubtitle)
+        _ = SCLAlertView(presentingView: UIApplication.shared.keyWindow!).showNotice(kNoticeTitle, subTitle: kSubtitle)
     }
     
     @IBAction func showWarning(_ sender: AnyObject) {
-        _ = SCLAlertView().showWarning(kWarningTitle, subTitle: kSubtitle)
+        _ = SCLAlertView(presentingView: UIApplication.shared.keyWindow!).showWarning(kWarningTitle, subTitle: kSubtitle)
     }
     
     @IBAction func showInfo(_ sender: AnyObject) {
-        _ = SCLAlertView().showInfo(kInfoTitle, subTitle: kSubtitle)
+        _ = SCLAlertView(presentingView: UIApplication.shared.keyWindow!).showInfo(kInfoTitle, subTitle: kSubtitle)
     }
 
 	@IBAction func showEdit(_ sender: AnyObject) {
         let appearance = SCLAlertView.SCLAppearance(showCloseButton: true)
-        let alert = SCLAlertView(appearance: appearance)
+        let alert = SCLAlertView(presentingView: UIApplication.shared.keyWindow!, appearance: appearance)
 		let txt = alert.addTextField("Enter your name")
         _ = alert.addButton("Show Name") {
 			print("Text value: \(txt.text)")
@@ -79,7 +85,7 @@ class ViewController: UIViewController {
         )
         
         // Initialize SCLAlertView using custom Appearance
-        let alert = SCLAlertView(appearance: appearance)
+        let alert = SCLAlertView(presentingView: self.dummyView, appearance: appearance)
         
         // Creat the subview
         let subview = UIView(frame: CGRect(x: 0,y: 0,width: 216,height: 70))
@@ -121,7 +127,7 @@ class ViewController: UIViewController {
     
     @IBAction func showCustomAlert(_ sender: AnyObject) {
     
-        let alert = SCLAlertView()
+        let alert = SCLAlertView(presentingView: UIApplication.shared.keyWindow!)
         _ = alert.addButton("First Button", target:self, selector:#selector(ViewController.firstButton))
         _ = alert.addButton("Second Button") {
             print("Second button tapped")
