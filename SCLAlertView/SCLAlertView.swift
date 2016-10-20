@@ -200,6 +200,7 @@ open class SCLAlertView: UIViewController {
     }
     
     var appearance: SCLAppearance!
+    fileprivate var presentingView: UIView!
     
     // UI Colour
     var viewColor = UIColor()
@@ -227,8 +228,9 @@ open class SCLAlertView: UIViewController {
     internal var buttons = [SCLButton]()
     fileprivate var selfReference: SCLAlertView?
     
-    public init(appearance: SCLAppearance) {
+    public init(presentingView: UIView, appearance: SCLAppearance) {
         self.appearance = appearance
+        self.presentingView = presentingView
         super.init(nibName:nil, bundle:nil)
         setup()
     }
@@ -237,20 +239,21 @@ open class SCLAlertView: UIViewController {
         fatalError("NSCoding not supported")
     }
     
-    required public init() {
-        appearance = SCLAppearance()
+    required public init(presentingView: UIView) {
+        self.appearance = SCLAppearance()
+        self.presentingView = presentingView
         super.init(nibName:nil, bundle:nil)
         setup()
     }
     
-    override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        appearance = SCLAppearance()
-        super.init(nibName:nibNameOrNil, bundle:nibBundleOrNil)
-    }
+//    override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+//        appearance = SCLAppearance()
+//        super.init(nibName:nibNameOrNil, bundle:nibBundleOrNil)
+//    }
     
     fileprivate func setup() {
         // Set up main view
-        view.frame = UIScreen.main.bounds
+        view.frame = self.presentingView.bounds
         view.autoresizingMask = [UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleWidth]
         view.backgroundColor = UIColor(red:0, green:0, blue:0, alpha:appearance.kDefaultShadowOpacity)
         view.addSubview(baseView)
@@ -296,7 +299,7 @@ open class SCLAlertView: UIViewController {
     
     override open func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        let rv = UIApplication.shared.keyWindow! as UIWindow
+        let rv = self.presentingView!
         let sz = rv.frame.size
         
         // Set background frame
@@ -616,7 +619,7 @@ open class SCLAlertView: UIViewController {
     open func showTitle(_ title: String, subTitle: String, duration: TimeInterval?, completeText: String?, style: SCLAlertViewStyle, colorStyle: UInt?=0x000000, colorTextButton: UInt?=0xFFFFFF, circleIconImage: UIImage? = nil, animationStyle: SCLAnimationStyle = .topToBottom) -> SCLAlertViewResponder {
         selfReference = self
         view.alpha = 0
-        let rv = UIApplication.shared.keyWindow! as UIWindow
+        let rv = self.presentingView!
         rv.addSubview(view)
         view.frame = rv.bounds
         baseView.frame = rv.bounds
@@ -753,7 +756,7 @@ open class SCLAlertView: UIViewController {
     // Show animation in the alert view
     fileprivate func showAnimation(_ animationStyle: SCLAnimationStyle = .topToBottom, animationStartOffset: CGFloat = -400.0, boundingAnimationOffset: CGFloat = 15.0, animationDuration: TimeInterval = 0.2) {
         
-        let rv = UIApplication.shared.keyWindow! as UIWindow
+        let rv = self.presentingView!
         var animationStartOrigin = self.baseView.frame.origin
         var animationCenter : CGPoint = rv.center
         
