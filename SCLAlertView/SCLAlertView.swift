@@ -706,7 +706,7 @@ open class SCLAlertView: UIViewController {
         return SCLAlertViewResponder(alertview: self)
     }
     
-    fileprivate func updateCircleIconView(_ style: SCLAlertViewStyle, circleIconImage: UIImage? = nil) {
+    func updateCircleIconView(_ style: SCLAlertViewStyle, circleIconImage: UIImage? = nil) {
         if let civ = self.circleIconView {
             civ.removeFromSuperview()
         }
