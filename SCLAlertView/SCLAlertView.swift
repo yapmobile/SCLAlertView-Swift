@@ -662,7 +662,7 @@ open class SCLAlertView: UIViewController {
         // Alert view colour and images
         circleView.backgroundColor = viewColor
 
-        updateCircleIconView(style)
+        updateCircleIconView(style, circleIconImage: circleIconImage)
         
         for txt in inputs {
             txt.layer.borderColor = viewColor.cgColor
