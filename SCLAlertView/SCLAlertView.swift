@@ -626,38 +626,9 @@ open class SCLAlertView: UIViewController {
         
         // Alert colour/icon
         viewColor = UIColor()
-        var iconImage: UIImage?
         let colorInt = colorStyle ?? style.defaultColorInt
         viewColor = UIColorFromRGB(colorInt)
-        // Icon style
-        switch style {
-        case .success:
-            
-            iconImage = checkCircleIconImage(circleIconImage, defaultImage: SCLAlertViewStyleKit.imageOfCheckmark)
-            
-        case .error:
-            
-            iconImage = checkCircleIconImage(circleIconImage, defaultImage: SCLAlertViewStyleKit.imageOfCross)
-            
-        case .notice:
-            
-            iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfNotice)
-            
-        case .warning:
-            
-            iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfWarning)
-            
-        case .info:
-            
-            iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfInfo)
-            
-        case .edit:
-            
-            iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfEdit)
-            
-        case .wait:
-            iconImage = nil
-        }
+        
         
         // Title
         if !title.isEmpty {
@@ -690,26 +661,8 @@ open class SCLAlertView: UIViewController {
         
         // Alert view colour and images
         circleView.backgroundColor = viewColor
-        // Spinner / icon
-        if style == .wait {
-            let indicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-            indicator.startAnimating()
-            circleIconView = indicator
-        }
-        else {
-            if let iconTintColor = iconTintColor {
-                circleIconView = UIImageView(image: iconImage!.withRenderingMode(.alwaysTemplate))
-                circleIconView?.tintColor = iconTintColor
-            }
-            else {
-                circleIconView = UIImageView(image: iconImage!)
-            }
-        }
-        circleView.addSubview(circleIconView!)
-        let x = (appearance.kCircleHeight - appearance.kCircleIconHeight) / 2
-        circleIconView!.frame = CGRect( x: x, y: x, width: appearance.kCircleIconHeight, height: appearance.kCircleIconHeight)
-        circleIconView?.layer.cornerRadius = circleIconView!.bounds.height / 2
-        circleIconView?.layer.masksToBounds = true
+
+        updateCircleIconView(style)
         
         for txt in inputs {
             txt.layer.borderColor = viewColor.cgColor
@@ -751,6 +704,64 @@ open class SCLAlertView: UIViewController {
        
         // Chainable objects
         return SCLAlertViewResponder(alertview: self)
+    }
+    
+    fileprivate func updateCircleIconView(_ style: SCLAlertViewStyle, circleIconImage: UIImage? = nil) {
+        if let civ = self.circleIconView {
+            civ.removeFromSuperview()
+        }
+        
+        // Icon style
+        var iconImage: UIImage?
+        switch style {
+        case .success:
+            
+            iconImage = checkCircleIconImage(circleIconImage, defaultImage: SCLAlertViewStyleKit.imageOfCheckmark)
+            
+        case .error:
+            
+            iconImage = checkCircleIconImage(circleIconImage, defaultImage: SCLAlertViewStyleKit.imageOfCross)
+            
+        case .notice:
+            
+            iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfNotice)
+            
+        case .warning:
+            
+            iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfWarning)
+            
+        case .info:
+            
+            iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfInfo)
+            
+        case .edit:
+            
+            iconImage = checkCircleIconImage(circleIconImage, defaultImage:SCLAlertViewStyleKit.imageOfEdit)
+            
+        case .wait:
+            iconImage = nil
+        }
+        
+        // Spinner / icon
+        if style == .wait {
+            let indicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+            indicator.startAnimating()
+            circleIconView = indicator
+        }
+        else {
+            if let iconTintColor = iconTintColor {
+                circleIconView = UIImageView(image: iconImage!.withRenderingMode(.alwaysTemplate))
+                circleIconView?.tintColor = iconTintColor
+            }
+            else {
+                circleIconView = UIImageView(image: iconImage!)
+            }
+        }
+        circleView.addSubview(circleIconView!)
+        let x = (appearance.kCircleHeight - appearance.kCircleIconHeight) / 2
+        circleIconView!.frame = CGRect( x: x, y: x, width: appearance.kCircleIconHeight, height: appearance.kCircleIconHeight)
+        circleIconView?.layer.cornerRadius = circleIconView!.bounds.height / 2
+        circleIconView?.layer.masksToBounds = true
     }
     
     // Show animation in the alert view
