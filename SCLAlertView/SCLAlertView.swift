@@ -217,7 +217,7 @@ open class SCLAlertView: UIViewController {
     var viewText = UITextView()
     var contentView = UIView()
     var circleBG = UIView(frame:CGRect(x:0, y:0, width:kCircleHeightBackground, height:kCircleHeightBackground))
-    var circleView = UIView()
+    open var circleView = UIView()
     var circleIconView : UIView?
     var duration: TimeInterval!
     var durationStatusTimer: Timer!
